@@ -27,17 +27,19 @@ df = pd.DataFrame()
 
 wait = WebDriverWait(driver, 1)
 
-for i in range(3,4):
+for i in range(0,2):
     if i==0:
-        url1 = 'https://www.tripadvisor.co.kr/Attractions-g4-Activities-Europe.html'
+        url1 = 'https://www.tripadvisor.co.kr/Attractions-g4-Activities-c36-Europe.html'
     else:
-        url1 = 'https://www.tripadvisor.co.kr/Attractions-g4-Activities{}-Europe.html'.format("-oa{}".format(30*i))
+        url1 = 'https://www.tripadvisor.co.kr/Attractions-g4-Activities-c36{}-Europe.html'.format("-oa{}".format(30*i))
     driver.get(url1)
+    time.sleep(6)
 
     for j in range(2,40):
         try:
+            #한 페이지에 있는 30개 장소
             driver.find_element(By.XPATH,'//*[@id="lithium-root"]/main/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div/section[{}]/div/div/div/div/article/div[2]/header/div/div/div/a[1]/h3/div/span/div'.format(j)).click()
-            time.sleep(5)
+            time.sleep(5.5)
             # 새 창이 열리기를 기다립니다.
             # WebDriverWait(driver, 10).until(EC.number_of_windows_to_be(2))
             # 모든 창 핸들을 가져옵니다
@@ -73,20 +75,23 @@ for i in range(3,4):
             address.append(addresss)
             print(address)
 
+            #한국어
             driver.find_element(By.XPATH,'//*[@id="tab-data-qa-reviews-0"]/div/div[1]/div/div/div[2]/div/div/div[2]/div/div/div/button').click()
-            wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="menu-item-ko"]')))
+            time.sleep(0.5)
+            # wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="menu-item-ko"]')))
             driver.find_element(By.XPATH,'//*[@id="menu-item-ko"]').click()
-            try:
-                wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[1]/div/div/div[3]/a/span')))
-            except:
-                wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[2]/div/div/div[3]/a/span')))
+            # try:
+            #     wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[1]/div/div/div[3]/a/span')))
+            # except:
+            #     wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[2]/div/div/div[3]/a/span')))
+            time.sleep(4)
             for l in range(20):
                 for k in range(1,11):
                     #더보기
                     try :
                         driver.find_element(By.XPATH,'//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[{}]/div/div/div[5]/div[2]/button/span'.format(k)).click()
                     except :
-                        print("2. error")
+                        print("더보기 없음")
                         pass
                     #리뷰1
                     try :
@@ -113,16 +118,16 @@ for i in range(3,4):
                     df = df.append(df_temp, ignore_index=True)
                     print(review)
                     review=[]
+                #화살표
                 try:
-                    driver.find_element(By.XPATH,'//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[11]/div[1]/div/div[1]/div[2]/div/a').click()
+                    try:
+                        driver.find_element(By.XPATH,'//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[11]/div[1]/div/div[1]/div[2]/div/a').click()
+                    except:
+                        driver.find_element(By.XPATH,
+                                            '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[12]/div[1]/div/div[1]/div[2]/div/a').click()
                 except:
-                    driver.find_element(By.XPATH,
-                                        '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[12]/div[1]/div/div[1]/div[2]/div/a').click()
-                try:
-                    wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[1]/div/div/div[3]/a/span')))
-                except:
-                    wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="tab-data-qa-reviews-0"]/div/div[5]/div/div[2]/div/div/div[3]/a/span')))
-                # time.sleep(1)
+                    break
+                time.sleep(3)
             driver.close()
             time.sleep(0.5)
             driver.switch_to.window(window_handles[0])
@@ -134,9 +139,6 @@ for i in range(3,4):
             # If the element is not found, simply continue to the next iteration
             print("Element not found - skipping", j)
             continue
-        # except:
-        #     print("1. error", j)
-        #     continue
 
         print(df)
-        df.to_csv("./crawling_data/crawlingdata_{}_8.csv".format('attraction'),index=False)
+        df.to_csv("./crawling_data/crawlingdata_{}_2.csv".format('food'),index=False)
