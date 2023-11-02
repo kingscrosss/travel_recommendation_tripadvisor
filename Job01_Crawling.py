@@ -33,7 +33,7 @@ reviews = []
 catecory=2     # 콘서트&쇼핑(2,5)
 for i in range(0,4):      # 4페이지까지 120개
     print('[ page', i+1,' ]')
-    for j in range(2,40):       # 1페이지 - 1~30개 크롤링 / 즐길거리 목록. 1페이지에 30개, xpath: 2~39까지
+    for j in range(13,40):       # 1페이지 - 1~30개 크롤링 / 즐길거리 목록. 1페이지에 30개, xpath: 2~39까지
         url = url1.format(catecorys[catecory], i * 30)
         driver.get(url)
         time.sleep(0.5)
@@ -51,8 +51,11 @@ for i in range(0,4):      # 4페이지까지 120개
         # 장소, 나라, 링크
         driver.get(link)
         time.sleep(0.5)
-        location = driver.find_element(By.XPATH, location_xpath).text
-        country = driver.find_element(By.XPATH, country_xpath).text
+        try:
+            location = driver.find_element(By.XPATH, location_xpath).text
+            country = driver.find_element(By.XPATH, country_xpath).text
+        except:
+            print("location, country error")
         # print(location, country)
         address = link
 
