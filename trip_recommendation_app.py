@@ -21,7 +21,7 @@ class Exam(QWidget, form_window):
             self.Tfidf = pickle.load(f)
         self.embedding_model = Word2Vec.load('./models/word2vec_trip_review.model')
 
-        self.df_reviews = pd.read_csv('./crawling_data/cleaned_one_review_test_None_ETC.csv')
+        self.df_reviews = pd.read_csv('./result/cleaned_one_review_231103.csv')
         self.locations = list(self.df_reviews['locations'])
         self.locations.sort()
         for location in self.locations:
@@ -115,6 +115,15 @@ class Exam(QWidget, form_window):
     def getRecommendation(self, cosine_sim):
         simScore = list(enumerate(cosine_sim[-1]))
         simScore = sorted(simScore, key=lambda x: x[1], reverse=True)
+        simScore = simScore[:11]    # 10번까지 슬라이싱
+        tripIdx = [i[0] for i in simScore]      # 추천 영화 0위부터 10위까지 11개 인덱스 저장
+        recTriplist = self.df_reviews.iloc[tripIdx, 0]
+        countrylist = self.df_reviews.iloc[tripIdx, 1]    # contury
+        addresslist = self.df_reviews.iloc[tripIdx, 2]    # address
+        concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist
+        concat = '\n\n'.join(concat[1:])  # 문자열로 return하기 위해서, 0번은 자기자신이니까 제외하고 프린트
+
+        return concat
         simScore = simScore[:6]    # 10번까지 슬라이싱
         tripIdx = [i[0] for i in simScore]      # 추천 영화 0위부터 10위까지 11개 인덱스 저장
         recTriplist = self.df_reviews.iloc[tripIdx, 0]

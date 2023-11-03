@@ -10,9 +10,10 @@ font_path = './malgun.ttf'
 font_name = font_manager.FontProperties(fname=font_path).get_name()
 plt.rc('font',family='NanumBarunGothic')
 
-df = pd.read_csv('./crawling_data/cleaned_one_review_test_None_ETC.csv')
+df = pd.read_csv('./result/cleaned_one_review_231103.csv')
+print(len(df))
 # words = df.iloc[0, :]
-words = df.iloc[0, 1].split()
+words = df.iloc[430, 3].split()
 print(words)
 
 worddict = collections.Counter(words)       # pandas의 value_counts랑 같은 것. 유니크한 값들의 횟수를 알려줌

@@ -3,7 +3,7 @@ from konlpy.tag import Okt
 import re
 import datetime
 
-df = pd.read_csv('./crawling_data/concat_review_test_231102Nov41.csv')
+df = pd.read_csv('./result/concat_review_110310.csv')
 # df.info()
 
 okt = Okt()
@@ -47,4 +47,4 @@ df = df[['location', 'country', 'address', 'cleaned_sentences']]
 print(df.head(10))
 df.info()
 
-df.to_csv('./crawling_data/cleaned_review_test_{}.csv'.format(datetime.datetime.now().strftime('%y%m%d%h%M')), index=False)
+df.to_csv('./result/cleaned_review_{}.csv'.format(datetime.datetime.now().strftime('%y%m%d')), index=False)
