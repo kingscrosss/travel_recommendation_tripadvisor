@@ -16,10 +16,12 @@ for location in df['location'].unique():
     one_sentences.append(one_sentence)  # location,country,address,cleaned_sentences
 
 print(len(one_sentences))
-df = df.drop_duplicates(['location'],inplace=True)[:-1]
+df.drop_duplicates(['location'],inplace=True)
 print(len(df))
+df.drop(['cleaned_sentences'], axis=1, inplace=True)
+print(df.head(10))
 df['reviews'] = one_sentences
 df_one = df.rename(columns={'location':'locations'})
 print(df_one.head())
 df_one.info()
-df_one.to_csv('./result/cleaned_one_review_{}.csv'.format(datetime.datetime.now().strftime('%y%m%d')), index=False)
+df_one.to_csv('./result/cleaned_one_review_2{}.csv'.format(datetime.datetime.now().strftime('%y%m%d')), index=False)
