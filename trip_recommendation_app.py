@@ -119,15 +119,14 @@ class Exam(QWidget, form_window):
     def getRecommendation(self, cosine_sim):
         simScore = list(enumerate(cosine_sim[-1]))
         simScore = sorted(simScore, key=lambda x: x[1], reverse=True)
-        simScore = simScore[:9]    # 10번까지 슬라이싱
-        tripIdx = [i[0] for i in simScore]      # 추천 영화 0위부터 10위까지 11개 인덱스 저장
+        simScore = simScore[:11]    # 8개까지가 최대한 잘 보여줌, 변경할 것.
+        tripIdx = [i[0] for i in simScore]
         recTriplist = self.df_reviews.iloc[tripIdx, 0]
         countrylist = self.df_reviews.iloc[tripIdx, 1]    # contury
         addresslist = self.df_reviews.iloc[tripIdx, 2]    # address
-        concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist
-        # concat = '<a href="'+addresslist+'>'+recTriplist+'</a>'
-        # concat = (recTriplist + '(' + countrylist + ') \n: '+'<a href="'+addresslist+'>' +'link'+'</a>')
-        concat = '\n\n'.join(concat[1:])  # 문자열로 return하기 위해서, 0번은 자기자신이니까 제외하고 프린트
+        # concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist   # <a href="링크"> 하이퍼 링크 걸 텍스트 </a>
+        concat = '<a href="' + addresslist + '">' + recTriplist + '(' + countrylist + ')' + '</a> <br>'
+        concat = '\n\n'.join(concat[1:])
         print(concat)
         return concat
 
