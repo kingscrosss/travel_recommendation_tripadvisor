@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.io import mmwrite, mmread        # mmwrite: 메트릭스를 저장하는 패키지
 import pickle
 
-df_reviews = pd.read_csv('./crawling_data/cleaned_one_review_test_None_ETC.csv')
+df_reviews = pd.read_csv('./result/cleaned_one_review_231103.csv')
 df_reviews.info()
 
 Tfidf = TfidfVectorizer(sublinear_tf=True)

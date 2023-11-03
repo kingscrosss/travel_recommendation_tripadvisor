@@ -10,26 +10,29 @@ def getRecommendation(cosine_sim):
     simScore = list(enumerate(cosine_sim[-1]))      # 맨 뒤부터 높은 값
     simScore = sorted(simScore, key=lambda x:x[1], reverse=True)    # lambda x: x[1] => simScore[1]값을 기준으로 거꾸로 정렬
     simScore = simScore[:11]
-    moviIdx = [i[0] for i in simScore]
-    recMovielist = df_reviews.iloc[moviIdx, 0]
-    return recMovielist
+    tripIdx = [i[0] for i in simScore]
+    recTriplist = df_reviews.iloc[tripIdx, 0]
+    countrylist = df_reviews.iloc[tripIdx, 1]  # contury
+    addresslist = df_reviews.iloc[tripIdx, 2]  # address
+    concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist
+    return concat
 
-df_reviews = pd.read_csv('./crawling_data/cleaned_one_review_test_None_ETC.csv')
+df_reviews = pd.read_csv('./result/cleaned_one_review_231103.csv')
 Tfidf_matrix = mmread('./models/Tfidf_trip_review.mtx').tocsr()
 with open('./models/tfidf.pickle','rb') as f:
     Tfidf = pickle.load(f)
 
 # # 영화 리뷰 기반 추천
-# print(df_reviews.iloc[1,0])
-# cosine_sim = linear_kernel(Tfidf_matrix[1], Tfidf_matrix)       # 코사인 유사도
+# print(df_reviews.iloc[70,0])
+# cosine_sim = linear_kernel(Tfidf_matrix[70], Tfidf_matrix)       # 코사인 유사도
 # # print(cosine_sim[0])
 # # print(len(cosine_sim[0]))
 # recommendation = getRecommendation(cosine_sim)[1:]
 # print(recommendation)
-
+#
 # # keyword 기반 추천
 # embedding_model = Word2Vec.load('./models/word2vec_trip_review.model') # 모델 불러오기
-# keyword = '뮤지컬'
+# keyword = '산책'
 # try:
 #     sim_word = embedding_model.wv.most_similar(keyword,topn=10)
 #     # print(sim_word)
@@ -56,7 +59,7 @@ with open('./models/tfidf.pickle','rb') as f:
 
 # 문장으로 입력 받을 경우
 ## 문장 전처리
-needs = '공부도 되고 산책도 되는 곳'
+needs = '공원'
 cleaned_needs = []
 # 형태소 분리
 okt = Okt()

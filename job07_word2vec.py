@@ -1,17 +1,17 @@
 import pandas as pd
 from gensim.models import Word2Vec
 
-df_review = pd.read_csv('./crawling_data/cleaned_one_review_test_None_ETC.csv')
-df_review.info()
+df_review = pd.read_csv('./result/cleaned_one_review_231103.csv')
+# df_review.info()
 
 reviews = df_review['reviews']
-print(reviews[0])
+print(reviews[500])
 
 tokens = []
 for sentence in reviews:
     token = sentence.split()
     tokens.append(token)
-print(tokens[0])
+print(tokens[500])
 
 embedding_model = Word2Vec(tokens, vector_size=100,     # 차원의 저주를 막기 위해서 100차원으로 줄임
                            window=4, min_count=20,      # min_count: 출연 빈도가 20번 이하인건 안 반영할래

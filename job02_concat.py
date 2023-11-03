@@ -2,7 +2,7 @@ import pandas as pd
 import glob
 import datetime
 
-data_paths = glob.glob('./temp/crawling_data_*.csv')
+data_paths = glob.glob('./crawling_data/team/*')
 print(data_paths)
 
 df = pd.DataFrame()
@@ -13,4 +13,4 @@ for path in data_paths:
     df = pd.concat([df, df_temp])
 df.drop_duplicates(inplace=True)
 df.info()
-df.to_csv('./crawling_data/concat_review_test_{}.csv'.format(datetime.datetime.now().strftime('%y%m%d%h%M')), index=False)
+df.to_csv('./result/concat_review_{}.csv'.format(datetime.datetime.now().strftime('%m%d%H')), index=False)
