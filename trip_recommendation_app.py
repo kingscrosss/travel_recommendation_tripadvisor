@@ -124,6 +124,15 @@ class Exam(QWidget, form_window):
         concat = '\n\n'.join(concat[1:])  # 문자열로 return하기 위해서, 0번은 자기자신이니까 제외하고 프린트
 
         return concat
+        simScore = simScore[:6]    # 10번까지 슬라이싱
+        tripIdx = [i[0] for i in simScore]      # 추천 영화 0위부터 10위까지 11개 인덱스 저장
+        recTriplist = self.df_reviews.iloc[tripIdx, 0]
+        countrylist = self.df_reviews.iloc[tripIdx, 1]    # contury
+        addresslist = self.df_reviews.iloc[tripIdx, 2]    # address
+        concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist
+        concat = '\n\n'.join(concat[1:])  # 문자열로 return하기 위해서, 0번은 자기자신이니까 제외하고 프린트
+
+        return concat
 
 if __name__=='__main__':
     app = QApplication(sys.argv)
