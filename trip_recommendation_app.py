@@ -10,7 +10,7 @@ from PyQt5.QtCore import QStringListModel
 from konlpy.tag import Okt
 import re
 
-form_window = uic.loadUiType('./trip_recomendation.ui')[0]
+form_window = uic.loadUiType('./trip_recomendation2.ui')[0]
 class Exam(QWidget, form_window):
     def __init__(self):
         super().__init__()
@@ -35,6 +35,10 @@ class Exam(QWidget, form_window):
 
         self.comboBox.currentIndexChanged.connect(self.combox_slot)
         self.btn_recommendation.clicked.connect(self.btn_slot)
+
+        self.lbl_recommendation.setOpenExternalLinks(True)
+        # self.lbl_recommendation.setTextInteractionFlags(TextSelectableByMouse)
+
 
     def btn_slot(self):
         keyword = self.le_keyword.text()
@@ -109,30 +113,24 @@ class Exam(QWidget, form_window):
         trip_idx = self.df_reviews[self.df_reviews['locations']==location].index[0]
         cosine_sim = linear_kernel(self.Tfidf_matrix[trip_idx], self.Tfidf_matrix)
         recommendation = self.getRecommendation(cosine_sim)
-
+        # print(recommendation)
         return recommendation
 
     def getRecommendation(self, cosine_sim):
         simScore = list(enumerate(cosine_sim[-1]))
         simScore = sorted(simScore, key=lambda x: x[1], reverse=True)
-        simScore = simScore[:11]    # 10번까지 슬라이싱
+        simScore = simScore[:9]    # 10번까지 슬라이싱
         tripIdx = [i[0] for i in simScore]      # 추천 영화 0위부터 10위까지 11개 인덱스 저장
         recTriplist = self.df_reviews.iloc[tripIdx, 0]
         countrylist = self.df_reviews.iloc[tripIdx, 1]    # contury
         addresslist = self.df_reviews.iloc[tripIdx, 2]    # address
         concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist
+        # concat = '<a href="'+addresslist+'>'+recTriplist+'</a>'
+        # concat = (recTriplist + '(' + countrylist + ') \n: '+'<a href="'+addresslist+'>' +'link'+'</a>')
         concat = '\n\n'.join(concat[1:])  # 문자열로 return하기 위해서, 0번은 자기자신이니까 제외하고 프린트
-
+        print(concat)
         return concat
-        simScore = simScore[:6]    # 10번까지 슬라이싱
-        tripIdx = [i[0] for i in simScore]      # 추천 영화 0위부터 10위까지 11개 인덱스 저장
-        recTriplist = self.df_reviews.iloc[tripIdx, 0]
-        countrylist = self.df_reviews.iloc[tripIdx, 1]    # contury
-        addresslist = self.df_reviews.iloc[tripIdx, 2]    # address
-        concat = recTriplist + '(' + countrylist + ') \n: ' + addresslist
-        concat = '\n\n'.join(concat[1:])  # 문자열로 return하기 위해서, 0번은 자기자신이니까 제외하고 프린트
 
-        return concat
 
 if __name__=='__main__':
     app = QApplication(sys.argv)
