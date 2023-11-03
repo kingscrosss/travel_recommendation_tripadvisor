@@ -16,7 +16,7 @@ for location in df['location'].unique():
     one_sentences.append(one_sentence)  # location,country,address,cleaned_sentences
 
 print(len(one_sentences))
-df.drop_duplicates(['location'],inplace=True)
+df = df.drop_duplicates(['location'],inplace=True)[:-1]
 print(len(df))
 df['reviews'] = one_sentences
 df_one = df.rename(columns={'location':'locations'})
